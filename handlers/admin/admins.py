@@ -36,7 +36,6 @@ def create_channel_table():
     conn.commit()
     conn.close()
 
-# Ensure the table is created at startup
 create_channel_table()
 
 
@@ -313,6 +312,13 @@ async def new_invite_link_callback_handler(callback_query: types.CallbackQuery):
 @dp.callback_query(lambda query: query.data.startswith("delete_"))
 async def delete_channel_callback_handler(callback_query: types.CallbackQuery):
     channel_id = int(callback_query.data.split('_')[-1])
+    inline_keyboard = InlineKeyboardBuilder()
+    inline_keyboard.add(
+        InlineKeyboardButton(
+            text="⏪ orqaga",
+            callback_data=f"list_channels"
+        )
+    )
     try:
         conn = sqlite3.connect('bot.db')
         cursor = conn.cursor()
@@ -323,7 +329,7 @@ async def delete_channel_callback_handler(callback_query: types.CallbackQuery):
             await bot.leave_chat(chat_id=channel_id)
         except:
             pass
-        await callback_query.message.edit_text(f"Kanal o'chirildi: {channel_id}\nVa bot chatni tark etdi")
+        await callback_query.message.edit_text(f"Kanal o'chirildi: {channel_id}\nVa bot chatni tark etdi", reply_markup=inline_keyboard.as_markup())
     except Exception as e:
         await callback_query.message.edit_text(f"Kanalni o'chirishda xato: {e}")
 

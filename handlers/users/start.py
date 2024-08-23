@@ -22,4 +22,4 @@ conn.commit()
 
 @dp.message(CommandStart())
 async def start_bot(message:types.Message):
-    await message.answer(f"Assalomu alaykum {message.from_user.full_name}! user")
+    await message.answer(f"Assalomu alaykum {message.from_user.full_name}!")
